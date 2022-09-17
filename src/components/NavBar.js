@@ -30,6 +30,10 @@ export default function NavBar(props) {
             <li className="nav-list-item">
               <Link style={{color: 'white', textDecoration: 'none', fontFamily: 'Helvetica'}} to="/student-home">Home</Link>
             </li>}
+            {user.role === 'teacher' && 
+            <li className="nav-list-item">
+              <Link style={{color: 'white', textDecoration: 'none', fontFamily: 'Helvetica'}} to="/students">Students</Link>
+            </li>}
             {user.userBool ?
             ((user.role === 'teacher' && 
             <li

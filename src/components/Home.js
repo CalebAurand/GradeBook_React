@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Table from '@mui/material/Table';
@@ -8,7 +9,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {Link} from 'react-router-dom'
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,12 +34,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function Home(props) {
-  const { listings, user, setClasses, classes } = props;
-  const [localClasses, setlocalClasses] = useState([]);
+  const { user, setClasses, classes } = props;
+  const [localClasses, setLocalClasses] = useState([]);
+  const [studentCount, setStudentCount] = useState([]);
   const [loopCounter, setLoopCounter] = useState(1);
-  const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
   
   const runFetchClasses = async () => {
+    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
     fetch('http://localhost:9000/view-classes',{
       method: 'GET',
       headers: {
@@ -48,28 +51,49 @@ export default function Home(props) {
     .then(res=>res.json())
     .then(response=>{
       console.log("fetchClasses response", response);
-      setlocalClasses(response);
+      setLocalClasses(response);
       setClasses(response);
+    })
+  }
+
+  const fetchStudentCount = () => {
+    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
+    fetch('http://localhost:9000/view-count-classes',{
+      method: 'GET',
+      headers: {
+        // "Content-type": "application/json; charset=UTF-8",
+        "Authorization": "Bearer "+trimdJWT
+      }
+    })
+    .then(res=>res.json())
+    .then(response=>{
+      console.log("fetch student count response", response);
+      setStudentCount(response);
     })
   }
 
   if(localClasses.length === 0 && loopCounter === 1){
     setLoopCounter(2);
     runFetchClasses();
+    fetchStudentCount();
   }else if(localClasses.length >= 1 && loopCounter === 2){
     setLoopCounter(3);
     setClasses(localClasses);
   };
+
+  console.log("home component global classes", classes);
+  console.log("local classes", localClasses);
+  console.log("student Count", studentCount);
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100vw'}}>
     {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {user.email}</div>}
     <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <h2>Classes</h2>
-      <Table sx={{ marginTop: 3, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '50vw', minWidth: 500 }} aria-label="customized table">
+      <Table sx={{ marginTop: 3, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '60vw', minWidth: 500 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Class Name</StyledTableCell>
+            <StyledTableCell align="center">Class Name</StyledTableCell>
             <StyledTableCell sx={{maxWidth: 20}} align="center">Subject</StyledTableCell>
             <StyledTableCell align="center"># of Students</StyledTableCell>
           </TableRow>
@@ -78,15 +102,21 @@ export default function Home(props) {
         {localClasses.length > 0 && <TableBody>
           {localClasses.map((classT, index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell component="th" sx={{fontWeight: 'bold', width: '8.2vw'}}scope="row">
-                <Link to={`/details/${classT.class_name}`}>{classT.class_name}</Link>
+              <StyledTableCell component="th" align="center" sx={{fontWeight: 'bold', width: '8.2vw'}}scope="row">
+                <Link to={`/class/${classT.id}`}>{classT.class_name}</Link>
               </StyledTableCell>
-              <StyledTableCell sx={{maxWidth: '25vw'}} align="left">{classT.class_subject}</StyledTableCell>
-              <StyledTableCell sx={{width: '6vw', minWidth: '7vw'}} align="right">{`${classT.count}`}</StyledTableCell>
+              <StyledTableCell sx={{width: '6vw', maxWidth: '25vw'}} align="center">{classT.class_subject}</StyledTableCell>
+              <StyledTableCell sx={{width: '6vw', minWidth: '7vw'}} align="center">{`${classT.count}`}</StyledTableCell>
             </StyledTableRow>
-          ))}
+        ))}
         </TableBody>}
       </Table>
+      <Link to="/new-class">
+      <Button variant="outlined" sx={{fontWeight: 'bold'}}>
+        <AddIcon fontSize="small" sx={{color: 'blue'}}/>
+        Add Class
+      </Button>
+      </Link>
       </TableContainer>
     </div>
   );
