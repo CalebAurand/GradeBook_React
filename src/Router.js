@@ -10,6 +10,7 @@ import StudentLogin from './containers/StudentLogin';
 import StudentHome from './containers/StudentHome';
 import StudentGrades from './containers/StudentGrades';
 import Students from './containers/Students';
+import CreateStudent from './containers/CreateStudent';
 
 const checkAuth = () => {
   let cookieObj = cookie.parse(document.cookie);
@@ -47,7 +48,7 @@ const Router = () => (
     <Route path="/student-home" element={<ProtectedRoute component={StudentHome}/>}/>
     <Route path="/student-grades/:id" element={<ProtectedRoute component={StudentGrades}/>}/>
     <Route path="/students" element={<ProtectedRoute component={Students}/>}/>
-    
+    <Route path="/create-student" element={<ProtectedRoute component={CreateStudent}/>}/>
   </Routes>
 )
 
