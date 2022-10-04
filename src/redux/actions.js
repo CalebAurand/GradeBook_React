@@ -44,7 +44,8 @@ export const fetchLogin = (user) => {
     })
     .then(res=>res.text())
     .then(response => {
-      if(response === "Bad Request"){
+      console.log("fetchLogin response",response);
+      if(response === "Bad Request" || response === "Internal Server Error"){
         return;
       };
       dispatch(fetchLoginAction([user, response, 'teacher']))
@@ -63,7 +64,8 @@ export const fetchStudentLogin = (user) => {
     })
     .then(res=>res.text())
     .then(response => {
-      if(response === "Bad Request"){
+      console.log("fetchStudentLogin response", response);
+      if(response === "Bad Request" || response === "Internal Server Error"){
         return;
       };
       dispatch(fetchLoginAction([user, response, 'student']))

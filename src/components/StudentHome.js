@@ -64,10 +64,10 @@ export default function StudentHome(props) {
     {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {user.email}</div>}
     <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <h2>Classes</h2>
-      <Table sx={{ marginTop: 3, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '50vw', minWidth: 500 }} aria-label="customized table">
+      <Table sx={{ marginTop: 3, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '60vw', minWidth: 500 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Class Name</StyledTableCell>
+            <StyledTableCell align="center">Class Name</StyledTableCell>
             <StyledTableCell sx={{maxWidth: 20}} align="center">Subject</StyledTableCell>
             <StyledTableCell align="center">Teacher Name</StyledTableCell>
           </TableRow>
@@ -76,11 +76,11 @@ export default function StudentHome(props) {
         {localClasses.length > 0 && <TableBody>
           {localClasses.map((classT, index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell component="th" sx={{fontWeight: 'bold', width: '8.2vw'}}scope="row">
+              <StyledTableCell align="center" sx={{fontWeight: 'bold', width: '8.2vw'}}scope="row">
                 <Link to={`/student-grades/${classT.id}`}>{classT.class_name}</Link>
               </StyledTableCell>
-              <StyledTableCell sx={{maxWidth: '25vw'}} align="left">{classT.class_subject}</StyledTableCell>
-              <StyledTableCell sx={{width: '6vw', minWidth: '7vw'}} align="right">{`${classT.user_name}`}</StyledTableCell>
+              <StyledTableCell sx={{width: '8.2vw', maxWidth: '25vw'}} align="center">{classT.class_subject}</StyledTableCell>
+              <StyledTableCell sx={{width: '6vw', minWidth: '7vw'}} align="center">{`${classT.user_name}`}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>}

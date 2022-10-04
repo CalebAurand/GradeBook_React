@@ -11,7 +11,15 @@ const user = (state = null, action) => {
       let newState = {};
       return newState
     case "SET_LOGIN":
+      let jwt = action.payload[1];
+      let jwtcut1 = jwt.slice(1, jwt.length-1);
+      console.log("jwt cut 1", jwtcut1);
       document.cookie = cookie.serialize("loggedIn", "true", {maxAge: 7200});
+      document.cookie = cookie.serialize("userJWT", jwtcut1, {maxAge: 7200});
+      document.cookie = cookie.serialize("email", action.payload[0].email, {maxAge: 7200});
+      document.cookie = cookie.serialize("role", action.payload[2], {maxAge: 7200});
+
+      console.log("set login action payload", action.payload);
       let copyState = {email: action.payload[0].email, userJWT: action.payload[1], role: action.payload[2], userBool: true};
       return copyState;
     default:

@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import { TextField, Button, Container } from '@mui/material'
 import {useNavigate} from 'react-router-dom'
+import cookie from 'cookie';
 
 const NewClass = (props) => {
   const { user } = props;
+  const cookies = cookie.parse(document.cookie);
+  const trimdJWT = cookies.userJWT;
   const navigate = useNavigate();
   const [classInfo, setClassInfo] = useState({
     name: "",
@@ -29,7 +32,6 @@ const NewClass = (props) => {
     console.log("classObject is ", classObj);
     //fetch POST request here
 
-    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
     fetch('http://localhost:9000/create-class',{
       method: 'POST',
       headers: {

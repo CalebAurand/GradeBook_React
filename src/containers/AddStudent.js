@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import CreateStudent from '../components/CreateStudent';
+import AddStudent from '../components/AddStudent';
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    classes: state.classes
   }
 }
 
@@ -13,4 +14,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateStudent)
+export default connect(mapStateToProps, mapDispatchToProps)(AddStudent)

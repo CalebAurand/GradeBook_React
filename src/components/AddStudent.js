@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
 import { TextField, Button, Container } from '@mui/material'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 
-const CreateStudent = (props) => {
-  const { user } = props;
+const AddStudent = (props) => {
+  const { user, classes } = props;
+  const {id} = useParams();
+  const classId = id;
   const navigate = useNavigate();
+  let currentClass = classes.find(clas => {
+    return clas.id === parseInt(id)
+  });
+
   const [studentInfo, setStudentInfo] = useState({
-    studentId: null,
-    name: "",
-    email: "",
-    emergency_contact: "",
-    accomodations: ""
+    studentId: 0
   });
 
   const handleTextChange = (e) => {
@@ -23,26 +25,23 @@ const CreateStudent = (props) => {
     })
   }
 
-/***THIS IS WHERE I LEFT OFF... SINCE I NEED TO MAKE A STUDENT AND TEACHER REGISTRATION PAGE... THIS COMPONENT IS REDUNDANT... UNLESS TEACHERS SPECIFICALLY NEED TO BE ABLE TO CREATE STUDENT PROFILES */
-
-  const createNewStudent = (e) => {
+  const addNewStudent = (e) => {
     e.preventDefault();
     let studentObj = {
-      studentId: studentInfo.studentId,
-      name: studentInfo.name,
+      student_id: studentInfo.studentId
       //: studentInfo.email
     };
     console.log("studentObject is ", studentObj);
     //fetch POST request here
 
     const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
-    fetch('http://localhost:9000/create-class',{
+    fetch(`http://localhost:9000/add-student/${classId}`,{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8",
         "Authorization": "Bearer "+trimdJWT
       },
-      body: JSON.stringify(classObj)
+      body: JSON.stringify(studentObj)
     })
     .then(res=>res.text())
     .then(response=>{
@@ -51,29 +50,22 @@ const CreateStudent = (props) => {
       navigate("/");
     })
   }
+
   return (
+    <div>
+      {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {user.email}</div>}
     <Container maxWidth="sm">
-        <form className="login-form" onSubmit={createNewClass}>
+      {currentClass && <h3>{currentClass.class_name} Add Student</h3>}
+        <form className="login-form" onSubmit={addNewStudent}>
           <TextField
             required
             fullWidth
             margin="normal"
             onChange={handleTextChange}
-            value={classInfo.name}
-            name="name"
-            label="Class Name"
-            type="text"
-            variant="standard"
-          />
-          <TextField
-            required
-            fullWidth
-            margin="normal"
-            onChange={handleTextChange}
-            value={classInfo.subject}
-            name="subject"
-            label="Class Subject"
-            type="text"
+            value={studentInfo.studentId}
+            name="studentId"
+            label="Student ID"
+            type="number"
             variant="standard"
           />
           <Button
@@ -83,11 +75,12 @@ const CreateStudent = (props) => {
             color="primary"
             sx={{backgroundColor: 'blue', width: '10vw', margin: '10px'}}
           >
-            Save Class
+            Add Student
           </Button>
         </form>
       </Container>
+      </div>
   )
 }
 
-export default CreateStudent
+export default AddStudent

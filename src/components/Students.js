@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import cookie from 'cookie';
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Table from '@mui/material/Table';
@@ -34,11 +35,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Students = (props) => {
   const {user} = props;
+  const cookies = cookie.parse(document.cookie);
   const [students, setStudents] = useState([]);
-  const [loopCounter, setLoopCounter] = useState(1);
+  const trimdJWT = cookies["userJWT"];
 
-  const runFetchStudents = async () => {
-    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
+  useEffect (() => {
     fetch('http://localhost:9000/view-students',{
       method: 'GET',
       headers: {
@@ -48,21 +49,13 @@ const Students = (props) => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("fetch students response", response);
       setStudents(response);
     })
-  }
-
-  if(students.length === 0 && loopCounter === 1){
-    setLoopCounter(2);
-    runFetchStudents();
-  };
-
-  console.log("students state", students);
+  }, []);
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100vw'}}>
-    {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {user.email}</div>}
+    {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
     <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <h2>Students</h2>
       <Table sx={{ marginTop: 3, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '60vw', minWidth: 500 }} aria-label="customized table">

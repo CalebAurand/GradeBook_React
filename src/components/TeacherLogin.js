@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { TextField, Button, Container, useFormControl } from "@mui/material";
 
 const TeacherLogin = (props) => {
-  const { user, setUser, fetchLogin, userJWT } = props;
+  const { user, fetchLogin} = props;
   
   const navigate = useNavigate();
 
@@ -29,7 +29,6 @@ const TeacherLogin = (props) => {
     // document.cookie = cookie.serialize("loggedIn", "true", {maxAge: 60});
     // set loggedIn = true and max-age = 60*1000 (one minute)
     
-    console.log('email', userState.email)
     let newUser = {
       email: userState.email,
       password: userState.password
@@ -46,8 +45,8 @@ const TeacherLogin = (props) => {
 
 
   return (
-    <div className="App">
-      <Container maxWidth="sm">
+    <div >
+      <Container maxWidth="sm" sx={{marginTop: '10vh', width: "75vw"}}>
         <form className="login-form" onSubmit={login}>
           <TextField
             required
@@ -58,6 +57,7 @@ const TeacherLogin = (props) => {
             name="email"
             label="Email"
             type="text"
+            sx={{maxWidth: '440px'}}
             variant="standard"
           />
           <TextField
@@ -69,6 +69,7 @@ const TeacherLogin = (props) => {
             name="password"
             label="Password"
             type="password"
+            sx={{maxWidth: '440px'}}
             variant="standard"
           />
           <Button
@@ -76,11 +77,21 @@ const TeacherLogin = (props) => {
             className="login-button"
             variant="contained"
             color="primary"
-            sx={{backgroundColor: 'blue', width: '10vw', margin: '10px'}}
+            sx={{backgroundColor: 'blue', width: '10vw', margin: '10px', minWidth: '114px'}}
           >
             Login
           </Button>
-          {userJWT && <p>{userJWT}</p>}
+          <Link to="/teacher-registration">
+            <Button
+              type="button"
+              className="register-button"
+              variant="contained"
+              color="primary"
+              sx={{backgroundColor: 'blue', width: '10vw', margin: '10px', minWidth: '114px'}}
+            >
+              Register
+            </Button>
+          </Link>
         </form>
       </Container>
     </div>

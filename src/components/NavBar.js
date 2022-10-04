@@ -13,29 +13,56 @@ import Button from '@mui/material/Button';
 export default function NavBar(props) {
   const navigate = useNavigate();
   const {user, unsetUser} = props;
-  console.log("Navbar element >>user>>", user)
+  const cookies = cookie.parse(document.cookie);
 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{backgroundColor: "#03BEFD"}}position="static">
-        <Toolbar>
+        <Toolbar className="nav--list-toolbar">
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left'}}>
             Home Grade Book
           </Typography>
           <ul className="nav--list">
-            {user.role === 'teacher' ? <li className="nav-list-item">
+            {cookies.role === 'teacher' ? <li className="nav-list-item">
               <Link style={{color: 'white', textDecoration: 'none', fontFamily: 'Helvetica'}} to="/">Home</Link>
             </li> :
             <li className="nav-list-item">
               <Link style={{color: 'white', textDecoration: 'none', fontFamily: 'Helvetica'}} to="/student-home">Home</Link>
             </li>}
-            {user.role === 'teacher' && 
+            {cookies.role === 'teacher' && 
             <li className="nav-list-item">
               <Link style={{color: 'white', textDecoration: 'none', fontFamily: 'Helvetica'}} to="/students">Students</Link>
             </li>}
-            {user.userBool ?
-            ((user.role === 'teacher' && 
+            {cookies.loggedIn === 'true' ?
+            ((cookies.role === 'teacher' && 
+            <li
+              className="nav-list-item"
+              style={{
+                color: 'white',
+                cursor: 'pointer',
+                listStyleType: 'none',
+                textDecoration: 'none'}}
+              onClick={() => {
+                document.cookie = cookie.serialize("loggedIn", null, {
+                maxAge: 0,
+                });
+                document.cookie = cookie.serialize("userJWT", null, {
+                  maxAge: 0,
+                });
+                document.cookie = cookie.serialize("email", null, {
+                  maxAge: 0,
+                });
+                document.cookie = cookie.serialize("role", null, {
+                  maxAge: 0,
+                });
+              unsetUser();
+              navigate("/login");
+              }}
+            >
+              Logout
+            </li>) || 
+            (cookies.role === 'student' && 
             <li
               className="nav-list-item"
               style={{
@@ -47,22 +74,13 @@ export default function NavBar(props) {
                 document.cookie = cookie.serialize("loggedIn", null, {
                 maxAge: 0,
               });
-              unsetUser();
-              navigate("/login");
-            }}
-            >
-              Logout
-            </li>) || 
-            (user.role === 'student' && 
-            <li
-              className="nav-list-item"
-              style={{
-                color: 'white',
-                cursor: 'pointer',
-                listStyleType: 'none',
-                textDecoration: 'none'}}
-              onClick={() => {
-                document.cookie = cookie.serialize("loggedIn", null, {
+              document.cookie = cookie.serialize("userJWT", null, {
+                maxAge: 0,
+              });
+              document.cookie = cookie.serialize("email", null, {
+                maxAge: 0,
+              });
+              document.cookie = cookie.serialize("role", null, {
                 maxAge: 0,
               });
               unsetUser();

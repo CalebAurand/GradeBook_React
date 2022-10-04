@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TextField, Button, Container } from "@mui/material";
 
-const StudentLogin = (props) => {
-  const { user, fetchLogin } = props;
+const RegisterStudent = () => {
   
   const navigate = useNavigate();
 
   const [userState, setUserState] = useState({
+    full_name: "",
     email: "",
     password: ""
   });
@@ -22,32 +22,46 @@ const StudentLogin = (props) => {
     });
   };
 
-  const login = (e) => {
+  const register = (e) => {
     e.preventDefault();
-    // set cookie here loggedIn=true;max-age=60*1000
-    //if we use the cookie module maxAge- the set time is in seconds, not milliseconds
-    // document.cookie = cookie.serialize("loggedIn", "true", {maxAge: 60});
-    // set loggedIn = true and max-age = 60*1000 (one minute)
-    
-    let newUser = {
+    let newStudent = {
+      name: userState.full_name,
       email: userState.email,
       password: userState.password
     };
-
-    fetchLogin(newUser);
-    // setUser(newUser);
-
-    /**NEED TO FIND A WAY TO AUTO NAVIGATE USER TO THE HOME PAGE AFTER LOGIN */
-    };
-
-    useEffect(()=>{
-      user.email && navigate("/student-home");
+    console.log("new student to register info", newStudent);
+    // fetch POST request to register new student (newStudent);
+    fetch('http://localhost:9000/student-registration',{
+      method: 'POST',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify(newStudent)
     })
+    .then(res=>res.text())
+    .then(response=>{
+      console.log("register new student response", response);
+      //once response received, navigate back to home page
+      navigate("/student-login");
+    })
+
+    };
 
   return (
     <div className="App">
       <Container maxWidth="sm">
-        <form className="login-form" onSubmit={login}>
+        <form className="login-form" onSubmit={register}>
+          <TextField
+            required
+            fullWidth
+            margin="normal"
+            onChange={handleTextChange}
+            value={userState.full_name}
+            name="full_name"
+            label="Student's Full Name"
+            type="text"
+            variant="standard"
+          />
           <TextField
             required
             fullWidth
@@ -72,28 +86,17 @@ const StudentLogin = (props) => {
           />
           <Button
             type="submit"
-            className="login-button"
+            className="register-button"
             variant="contained"
             color="primary"
             sx={{backgroundColor: 'blue', width: '10vw', margin: '10px'}}
           >
-            Login
+            Register
           </Button>
-          <Link to="/student-registration">
-            <Button
-              type="button"
-              className="register-button"
-              variant="contained"
-              color="primary"
-              sx={{backgroundColor: 'blue', width: '10vw', margin: '10px'}}
-            >
-              Register
-            </Button>
-          </Link>
         </form>
       </Container>
     </div>
   );
 };
 
-export default StudentLogin;
+export default RegisterStudent;

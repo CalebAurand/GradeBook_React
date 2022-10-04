@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useParams, Link} from 'react-router-dom';
-import cookie from 'cookie';
 import { styled } from '@mui/material/styles';
+import cookie from 'cookie';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -32,14 +32,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Class = (props) => {
+const Assignments = (props) => {
   const {user, classes} = props;
   const {id} = useParams();
   const cookies = cookie.parse(document.cookie);
-  const addStudentLink = `/add-student/${id}`;
-  const [students, setStudents] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [loopCounter, setLoopCounter] = useState(1);
   const trimdJWT = cookies["userJWT"];
+  // let currentClass = classes.find(clas => {
+  //   return clas.id === parseInt(id)
+  // });
   const [currentClass, setCurrentClass] = useState({});
+  console.log("currentClass", currentClass);
 
   useEffect(()=> {
     fetch(`http://localhost:9000/view-class/${id}`, {
@@ -54,7 +58,7 @@ const Class = (props) => {
   }, [setCurrentClass]);
 
   useEffect(() => {
-    fetch(`http://localhost:9000/view-class-students/${id}`,{
+    fetch(`http://localhost:9000/assignments/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -63,50 +67,48 @@ const Class = (props) => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("fetchStudents response", response);
-      setStudents(response);
+      console.log("fetchAssignments response", response);
+      setAssignments(response);
     })
-  }, [setStudents])
+  }, []);
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100vw'}}>
     {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
     <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <div style={{width: '60vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 2, marginBottom: 0 }}>
-        <h2>{currentClass.class_name} Roster</h2>
-        <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to="/"><Button variant="outlined" sx={{fontWeight: 'bold'}}>Classes</Button></Link>
+        <h2>{currentClass.class_name} Assignments</h2>
+        <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/class/${id}`}><Button variant="outlined" sx={{fontWeight: 'bold'}}>Roster</Button></Link>
         <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/assignments/${id}`}><Button variant="outlined" sx={{fontWeight: 'bold'}}>Assignments</Button></Link>
         <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/grades/${id}`}><Button variant="outlined" sx={{fontWeight: 'bold'}}>Grades</Button></Link>
       </div>
       <Table sx={{ marginTop: 0, marginBottom: 6, marginLeft: 'auto', marginRight: 'auto', width: '60vw', minWidth: 500 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Student Id</StyledTableCell>
-            <StyledTableCell align="center">Student Name</StyledTableCell>
-            <StyledTableCell align="center">GPA</StyledTableCell>
-            <StyledTableCell align="center">Turned In</StyledTableCell>
-            <StyledTableCell align="center">Assignments Missing</StyledTableCell>
+            <StyledTableCell align="center">Assignment Id</StyledTableCell>
+            <StyledTableCell align="center">Assignment Name</StyledTableCell>
+            <StyledTableCell align="center">Type</StyledTableCell>
+            <StyledTableCell align="center">Description</StyledTableCell>
           </TableRow>
         </TableHead>
 
-        {students.length > 0 && <TableBody>
-          {students.map((student, index) => (
+        {assignments.length > 0 && <TableBody>
+          {assignments.map((assignment, index) => (
             <StyledTableRow key={index}>
-              <StyledTableCell sx={{width: '5vw'}} align="center">{student.id}</StyledTableCell>
+              <StyledTableCell sx={{width: '5vw'}} align="center">{assignment.id}</StyledTableCell>
               <StyledTableCell align="center" sx={{fontWeight: 'bold', width: '8vw'}}scope="row">
-                <Link to={`/details-student/${student.id}`}>{student.user_name}</Link>
+                <Link to={`/assignment/${assignment.id}`}>{assignment.assignment_name}</Link>
               </StyledTableCell>
-              <StyledTableCell sx={{width: '5vw'}} align="center">{student.user_name}</StyledTableCell>
-              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">{student.user_name}</StyledTableCell>
-              <StyledTableCell sx={{minWidth: '5vw', width: '10vw', maxWidth: '30vw'}} align="center">{student.user_name}</StyledTableCell>
+              <StyledTableCell sx={{width: '5vw'}} align="center">{assignment.assignment_type}</StyledTableCell>
+              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">{assignment.assignment_description}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>}
       </Table>
-      <Link style={{textDecoration: 'none'}} to={addStudentLink}>
+      <Link style={{textDecoration: 'none'}} to={`/add-assignment/${id}`}>
         <Button variant="outlined" sx={{fontWeight: 'bold'}}>
           <AddIcon fontSize="small" sx={{color: 'blue'}}/>
-          Add Student
+          Add Assignment
         </Button>
       </Link>
       </TableContainer>
@@ -114,4 +116,4 @@ const Class = (props) => {
   )
 }
 
-export default Class
+export default Assignments
