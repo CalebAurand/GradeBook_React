@@ -15,6 +15,7 @@ const AddAssignment = (props) => {
   const classId = id;
   const navigate = useNavigate();
   const [currentClass, setCurrentClass] = useState({});
+  const trimdJWT = cookies.userJWT;
 
   useEffect(()=> {
     fetch(`http://localhost:9000/view-class/${id}`, {
@@ -55,7 +56,6 @@ const AddAssignment = (props) => {
     console.log("assignment Object is ", assignmentObj);
     //fetch POST request here
 
-    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
     fetch(`http://localhost:9000/add-assignment/${classId}`,{
       method: 'POST',
       headers: {

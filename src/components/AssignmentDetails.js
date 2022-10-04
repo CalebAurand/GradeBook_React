@@ -12,6 +12,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,6 +38,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const AssignmentDetails = (props) => {
   const [classId, setClassId] = useState();
   const [assignmentInfo, setAssignmentInfo] = useState();
+  const [deleteId, setDeleteId] = useState(null);
+  const [showWarning, setShowWarning] = useState(false);
   const {id} = useParams();
   const navigate = useNavigate();
   const cookies = cookie.parse(document.cookie);
@@ -59,8 +63,22 @@ const AssignmentDetails = (props) => {
     })
   }, [id]);
 
-  const deleteAssignment = (id) => {
-    console.log("going to delete assignment, id is: ", id);
+  const deleteAssignment = (assignmentId) => {
+    console.log("going to delete assignment, id is: ", assignmentId);
+
+    fetch(`http://localhost:9000/delete-assignment/${assignmentId}`,{
+      method: 'DELETE',
+      headers: {
+        // "Content-type": "application/json; charset=UTF-8",
+        "Authorization": "Bearer "+trimdJWT
+      }
+    })
+    .then(res=>console.log(res.status))
+    .then(response=>{
+      console.log("delete assignment response", response);
+      setDeleteId(null);
+      navigate(`/assignments/${classId}`);
+    })
   }
 
   return (
@@ -94,7 +112,10 @@ const AssignmentDetails = (props) => {
               <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">{assignmentInfo.assignment_description}</StyledTableCell>
               <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">
                 <DeleteIcon sx={{color: "red", cursor: "pointer"}} 
-                  onClick={()=>deleteAssignment(assignmentInfo.id)}
+                  onClick={()=>{
+                    setDeleteId(assignmentInfo.id);
+                    setShowWarning(true);
+                  }}
                 />
               </StyledTableCell>
             </StyledTableRow>
@@ -107,6 +128,30 @@ const AssignmentDetails = (props) => {
         </Button>
       </Link>}
       </TableContainer>
+      {showWarning && <Alert severity="warning" sx={{zIndex: 200, left: '28%', top: '38%', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '39vw', borderRadius: '10px'}}>
+        <AlertTitle sx={{fontWeight: 'bold'}}>Warning</AlertTitle>
+        The DELETE you are about to perform is permanent — <strong>Are you sure?</strong>
+          <div>
+            <Button variant="contained" sx={{display: 'inline-block', marginRight: 10}}
+              onClick={()=>{
+                deleteAssignment(deleteId); 
+                setShowWarning(false);
+                }
+              }
+            >
+              Yes
+            </Button>
+            <Button variant="contained" sx={{display: 'inline-block',}}
+              onClick={()=>{
+                setDeleteId(null);
+                setShowWarning(false);
+                }
+              }
+            >
+              No
+            </Button>
+          </div>
+        </Alert>}
       </div>
   )
 }

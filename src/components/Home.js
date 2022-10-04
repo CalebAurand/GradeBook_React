@@ -165,25 +165,27 @@ export default function Home(props) {
       {showWarning && <Alert severity="warning" sx={{zIndex: 200, left: '28%', top: '38%', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '39vw', borderRadius: '10px'}}>
         <AlertTitle sx={{fontWeight: 'bold'}}>Warning</AlertTitle>
         The DELETE you are about to perform is permanent — <strong>Are you sure?</strong>
-        <Button variant="contained" sx={{display: 'inline-block', marginRight: 10}}
-          onClick={()=>{
-            deleteClass(deleteId); 
-            setShowWarning(false);
+        <div>
+          <Button variant="contained" sx={{display: 'inline-block', marginRight: 10}}
+            onClick={()=>{
+              deleteClass(deleteId); 
+              setShowWarning(false);
+              }
             }
-          }
-        >
-          Yes
-        </Button>
-        <Button variant="contained" sx={{display: 'inline-block',}}
-          onClick={()=>{
-            setDeleteId(null);
-            setIDOfClass(null);
-            setShowWarning(false);
+          >
+            Yes
+          </Button>
+          <Button variant="contained" sx={{display: 'inline-block',}}
+            onClick={()=>{
+              setDeleteId(null);
+              setIDOfClass(null);
+              setShowWarning(false);
+              }
             }
-          }
-        >
-          No
-        </Button>
+          >
+            No
+          </Button>
+        </div>
       </Alert>}
     </div>
   );
