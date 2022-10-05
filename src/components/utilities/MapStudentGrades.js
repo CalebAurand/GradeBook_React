@@ -56,14 +56,13 @@ const MapStudentGrades= (props) => {
     for(let i=zipArray.length-1; i<numAssign; i++){
       zipArray[i] = {zipElement: true};
     };
-    console.log("zipArray contents", zipArray);
     return (
       <>
         {zipArray.map((element, index)=>{
           if(element.zipElement===true){
             return(
               <StyledTableCell key={`stt${index}`} sx={{width: '3vw'}} align="center">
-                <TextField size="small" sx={{width: '3vw'}}>
+                <TextField size="small" sx={{width: '3vw'}} assign-id={assignList[index].id}>
 
                 </TextField>
               </StyledTableCell>

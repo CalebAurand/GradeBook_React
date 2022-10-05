@@ -40,6 +40,15 @@ const Grades = () => {
   const [studentsArray, setStudentsArray] = useState([]);
   const trimdJWT = cookies.userJWT;
 
+  /*************************************
+   * create a function that handles the change for each text field
+   * and tracks the changes in state for each change with the info...
+   * {studentId, assignmentId, grade to be added}
+   * ...those are the 3 data points needed to insert new grades into the DB
+   */
+
+  /***create a function that handles the "save" POST fetch request for all the new grades */
+
   useEffect(()=>{
     fetch(`http://localhost:9000/view-class-students/${id}`,{
       method: 'GET',
@@ -50,7 +59,7 @@ const Grades = () => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("second student fetch response", response);
+      console.log("student fetch response", response);
       setStudentsArray(response);
     })
   }, [setStudentsArray])
@@ -113,10 +122,6 @@ const Grades = () => {
 
         {studentsArray && <TableBody>
           {studentsArray.map((student, index) => {
-            //in each row
-            //grab first/next student from grades
-            //map out each grade for matching that student id
-            //once a new student id is reached then return/break
             return(
             <StyledTableRow key={index}>
               <StyledTableCell sx={{width: '3vw'}} align="center">{student.user_name}</StyledTableCell>
@@ -131,22 +136,3 @@ const Grades = () => {
 }
 
 export default Grades
-
-
-/**
- * {student.map((grade, idx)=>{
-                if(idx === 0){
-                  return(
-                    <StyledTableCell key={index} sx={{width: '3vw'}} align="center">{grade}</StyledTableCell>
-                  )
-                }else{
-                  return(
-                    <>
-                      <StyledTableCell key={grade.gradeId} sx={{width: '3vw'}} align="center">
-                        <Link style={{textDecoration: 'none'}} to={`/grade/${grade.gradeId}`}>  {grade.grade}
-                        </Link>
-                      </StyledTableCell>
-                    </>
-                )}
-              })}
- */
