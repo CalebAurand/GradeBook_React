@@ -15,7 +15,6 @@ const UpdateAssignment = (props) => {
   const assignmentId = id;
   const navigate = useNavigate();
   const [classId, setClassId] = useState(null);
-
   const [assignmentInfo, setAssignmentInfo] = useState({});
 
   const [newAssignmentInfo, setNewAssignmentInfo] = useState({

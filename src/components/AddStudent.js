@@ -1,18 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import cookie from 'cookie';
 import { TextField, Button, Container } from '@mui/material'
 import {useNavigate, useParams} from 'react-router-dom'
 
 const AddStudent = (props) => {
-  const { user, classes } = props;
   const {id} = useParams();
   const classId = id;
+  const cookies = cookie.parse(document.cookie);
   const navigate = useNavigate();
-  let currentClass = classes.find(clas => {
-    return clas.id === parseInt(id)
-  });
+  const trimdJWT = cookies.userJWT;
+  const [currentClass, setCurrentClass] = useState({});
+
+  useEffect(()=> {
+    fetch(`http://localhost:9000/view-class/${id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer "+trimdJWT
+      }
+    })
+    .then(res=>res.json())
+    .then(response=>setCurrentClass(response[0]))
+    console.log("currentClass after set", currentClass)
+  }, [setCurrentClass]);
 
   const [studentInfo, setStudentInfo] = useState({
-    studentId: 0
+    studentId: null
   });
 
   const handleTextChange = (e) => {
@@ -34,7 +46,7 @@ const AddStudent = (props) => {
     console.log("studentObject is ", studentObj);
     //fetch POST request here
 
-    const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
+    
     fetch(`http://localhost:9000/add-student/${classId}`,{
       method: 'POST',
       headers: {
@@ -53,7 +65,7 @@ const AddStudent = (props) => {
 
   return (
     <div>
-      {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {user.email}</div>}
+      {cookies.email && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
     <Container maxWidth="sm">
       {currentClass && <h3>{currentClass.class_name} Add Student</h3>}
         <form className="login-form" onSubmit={addNewStudent}>
@@ -70,10 +82,11 @@ const AddStudent = (props) => {
           />
           <Button
             type="submit"
+            size="small"
             className="login-button"
-            variant="contained"
+            variant="outlined"
             color="primary"
-            sx={{backgroundColor: 'blue', width: '10vw', margin: '10px'}}
+            sx={{ width: '15vw', margin: '10px', border: '1px solid blue', fontWeight: 'bold'}}
           >
             Add Student
           </Button>
