@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, Link} from 'react-router-dom';
 import cookie from 'cookie';
+import ClassHeaderName from './utilities/ClassHeaderName';
+import MapStudentGrades from './utilities/MapStudentGrades';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -31,20 +33,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Grades = (props) => {
-  const {user, classes} = props;
+const Grades = () => {
   const {id} = useParams();
   const cookies = cookie.parse(document.cookie);
-  const [grades, setGrades] = useState([]);
   const [assignmentList, setAssignmentList] = useState([]);
-  const [student_grades, setStudentGrades] = useState([]);
+  const [studentsArray, setStudentsArray] = useState([]);
   const trimdJWT = cookies.userJWT;
-  const [currentClass, setCurrentClass] = useState({});
 
-
-
-  useEffect(() => {
-    fetch(`http://localhost:9000/grades/${id}`,{
+  useEffect(()=>{
+    fetch(`http://localhost:9000/view-class-students/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -53,73 +50,35 @@ const Grades = (props) => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("fetchGrades response", response);
-      setGrades(response);
-      let copyGrades = response;
-
-      let studentGradesArray = [];
-      let assignmentNames = [];
-      let studentCounter = 0;
-      let initial;
-      console.log("copy of grades in useEffect", copyGrades)
-      for(let i = 0; i < copyGrades.length; i++){
-        if(i === 0){
-          //set initial student's id
-          initial = copyGrades[0].user_name;
-          //map through grades, put assignment names into an array
-          //push that assignment names array to first position of studentGradesArray
-          
-          copyGrades.map(grade=>{
-            if(grade.user_name === initial){
-                assignmentNames.push(grade.assignment_name);
-              }else{
-                return;
-              }
-            });
-          console.log("initial student", initial);
-          studentGradesArray.push([initial]);
-
-        };
-        if(initial === copyGrades[i].user_name){
-          studentGradesArray[studentCounter].push({gradeId: copyGrades[i].gradeId, grade: copyGrades[i].grade});
-        }else{
-          studentCounter++;
-          initial = copyGrades[i].user_name;
-          studentGradesArray.push([initial])
-          studentGradesArray[studentCounter].push({gradeId: copyGrades[i].gradeId, grade: copyGrades[i].grade});
-        };
-        //if on second iteration check to see if student is the same,if so add grade to student's grades array
-        //if not same student, start a new usestate for next student
-      };
-      console.log("student grades Array from grades", studentGradesArray);
-      setStudentGrades(studentGradesArray);
-      setAssignmentList(assignmentNames);
+      console.log("second student fetch response", response);
+      setStudentsArray(response);
     })
+  }, [setStudentsArray])
 
-    return () => {
-      setStudentGrades([])
-      setAssignmentList([])
-    }
-  }, [id, trimdJWT]);
-
-  useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
-      method: "GET",
+  useEffect(() => {
+    fetch(`http://localhost:9000/assignments/${id}`,{
+      method: 'GET',
       headers: {
+        // "Content-type": "application/json; charset=UTF-8",
         "Authorization": "Bearer "+trimdJWT
       }
     })
     .then(res=>res.json())
-    .then(response=>setCurrentClass(response[0]))
-    console.log("currentClass after set", currentClass)
-  }, [setCurrentClass]);
+    .then(response=>{
+      console.log("fetchAssignments response", response);
+      setAssignmentList(response);
+    })
+  }, []);
+  
+  console.log("studentsArray", studentsArray);
+  console.log("assignment List", assignmentList);
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100vw'}}>
-    {user && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
+    {cookies.email && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
     <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <div style={{width: '60vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 2, marginBottom: 0 }}>
-        <h2>{currentClass.class_name} Grades</h2>
+        <ClassHeaderName jwt={trimdJWT} id={id} nextText={"Grades"}/>
         <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/class/${id}`}>
           <Button variant="outlined" sx={{fontWeight: 'bold'}}>Roster</Button>
         </Link>
@@ -137,30 +96,45 @@ const Grades = (props) => {
             <>
             {assignmentList.map((assignment, index)=>{
               return (
-                <StyledTableCell key={index}>{assignment}</StyledTableCell>
+                <StyledTableCell key={`a${index}`}>{assignment.assignment_name}</StyledTableCell>
               )
             })}
             </>
           </TableRow>
           <TableRow>
-            <StyledTableCell align="center" sx={{lineHeight: '.1rem'}}>Student Name</StyledTableCell>
-            {assignmentList.map((grade, index)=>{
+            <StyledTableCell align="center" sx={{minWidth: '115px', lineHeight: '.1rem'}}>Student Name</StyledTableCell>
+            {assignmentList.map((thing, index)=>{
               return (
-                <StyledTableCell key={index}></StyledTableCell>
+                <StyledTableCell key={`at${index}`}></StyledTableCell>
               )
             })}
           </TableRow>
         </TableHead>
 
-        {student_grades.length > 0 && <TableBody>
-          {student_grades.map((student, index) => {
+        {studentsArray && <TableBody>
+          {studentsArray.map((student, index) => {
             //in each row
             //grab first/next student from grades
             //map out each grade for matching that student id
             //once a new student id is reached then return/break
             return(
             <StyledTableRow key={index}>
-              {student.map((grade, idx)=>{
+              <StyledTableCell sx={{width: '3vw'}} align="center">{student.user_name}</StyledTableCell>
+              <MapStudentGrades id={student.id} jwt={trimdJWT} numAssign={assignmentList.length} assignList={assignmentList}/>
+            </StyledTableRow>
+          )})}
+        </TableBody>}
+      </Table>
+      </TableContainer>
+    </div>
+  )
+}
+
+export default Grades
+
+
+/**
+ * {student.map((grade, idx)=>{
                 if(idx === 0){
                   return(
                     <StyledTableCell key={index} sx={{width: '3vw'}} align="center">{grade}</StyledTableCell>
@@ -175,13 +149,4 @@ const Grades = (props) => {
                     </>
                 )}
               })}
-            </StyledTableRow>
-          )})}
-        </TableBody>}
-      </Table>
-      </TableContainer>
-    </div>
-  )
-}
-
-export default Grades
+ */

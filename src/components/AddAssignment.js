@@ -76,7 +76,7 @@ const AddAssignment = (props) => {
     <div>
       {cookies.email && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
     <Container sx={{maxWidth: '900px', width: '600px'}}>
-      {currentClass && <h3 style={{display: 'inline-block'}}>{currentClass.class_name} Add Assignment</h3>}
+      {currentClass && <h3 style={{display: 'inline-block', marginRight: '45px'}}>{currentClass.class_name} Add Assignment</h3>}
       <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/assignments/${classId}`}>
         <Button variant="outlined" sx={{fontWeight: 'bold', marginLeft: '5px'}}>
           Assignments
@@ -94,8 +94,8 @@ const AddAssignment = (props) => {
             type="text"
             variant="standard"
           />
-          <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label">Assignment Type</FormLabel>
+          <FormControl sx={{width: '100%', marginTop: '13px'}}>
+            <FormLabel id="demo-row-radio-buttons-group-label" sx={{textAlign: 'left'}}>Assignment Type</FormLabel>
               <RadioGroup row name="assignment_type" onChange={handleTextChange} value={assignmentInfo.type}>
                 <FormControlLabel value="hw" control={<Radio />} label="Homework" />
                 <FormControlLabel value="quiz" control={<Radio />} label="Quiz" />
@@ -119,7 +119,7 @@ const AddAssignment = (props) => {
             className="login-button"
             variant="outlined"
             color="primary"
-            sx={{ width: '15vw', margin: '15px', border: '2px solid'}}
+            sx={{ width: '15vw', minWidth: '250px', margin: '15px', border: '2px solid'}}
           >
             <strong>Add Assignment</strong>
           </Button>
