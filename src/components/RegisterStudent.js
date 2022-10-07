@@ -49,6 +49,9 @@ const RegisterStudent = () => {
 
   return (
     <div className="App">
+      <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '1vh', width: '100vw' }}>
+        Student Registration
+      </div>
       <Container maxWidth="sm">
         <form className="login-form" onSubmit={register}>
           <TextField

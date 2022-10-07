@@ -20,6 +20,8 @@ import AssignmentDetails from './containers/AssignmentDetails';
 import UpdateAssignment from './components/UpdateAssignment';
 import Grades from './containers/Grades';
 import GradeDetails from './containers/GradeDetails';
+import UpdateGrade from './components/UpdateGrade';
+import UpdateClass from './components/UpdateClass';
 
 const checkAuth = () => {
   let cookieObj = cookie.parse(document.cookie);
@@ -54,12 +56,14 @@ const Router = () => (
     <Route path="/" element={<ProtectedRoute component={Home} />} />
     <Route path='/class/:id' element={<ProtectedRoute component={Class}/>} />
     <Route path="/new-class" element={<ProtectedRoute component={NewClass}/>}/>
+    <Route path="/update-class/:id" element={<ProtectedRoute component={UpdateClass}/>}/>
     <Route path="/assignments/:id" element={<ProtectedRoute component={Assignments}/>}/>
     <Route path="/assignment/:id" element={<ProtectedRoute component={AssignmentDetails}/>}/>
     <Route path="/add-assignment/:id" element={<ProtectedRoute component={AddAssignment}/>}/>
     <Route path="/update-assignment/:id" element={<ProtectedRoute component={UpdateAssignment}/>}/>
     <Route path="/grades/:id" element={<ProtectedRoute component={Grades}/>}/>
     <Route path="/grade/:id" element={<ProtectedRoute component={GradeDetails}/>}/>
+    <Route path="/update-grade/:id" element={<ProtectedRoute component={UpdateGrade}/>}/>
     <Route path="/details-student/:id" element={<ProtectedRoute component={DetailsStudent}/>}/>
     <Route path="/student-login" element={<StudentLogin />} />
     <Route path="/student-registration" element={<RegisterStudent/>}/>

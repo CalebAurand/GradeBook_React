@@ -46,6 +46,9 @@ const TeacherLogin = (props) => {
 
   return (
     <div >
+      <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '1vh', width: '100vw' }}>
+        Teacher Login
+      </div>
       <Container maxWidth="sm" sx={{marginTop: '10vh', width: "75vw"}}>
         <form className="login-form" onSubmit={login}>
           <TextField

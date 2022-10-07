@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams, Link} from 'react-router-dom';
+import {useParams, Link, useNavigate} from 'react-router-dom';
 import cookie from 'cookie';
 import ClassHeaderName from './utilities/ClassHeaderName';
 import MapStudentGrades from './utilities/MapStudentGrades';
@@ -35,9 +35,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Grades = () => {
   const {id} = useParams();
+  const classId = id;
+  const navigate = useNavigate();
   const cookies = cookie.parse(document.cookie);
   const [assignmentList, setAssignmentList] = useState([]);
+  const [assignmentsObjects, setAssignmentsObjects] = useState([]);
   const [studentsArray, setStudentsArray] = useState([]);
+  const [postCounter, setPostCounter] = useState(1);  
   const trimdJWT = cookies.userJWT;
 
   /*************************************
@@ -46,6 +50,66 @@ const Grades = () => {
    * {studentId, assignmentId, grade to be added}
    * ...those are the 3 data points needed to insert new grades into the DB
    */
+
+  //set state template for student id, and empty grades array
+
+  /**create a function to handle submit of form, and get all of the <MapStudentGrades> grades into newGradesInfo */
+  const handleGrade = (gradeObj)=>{
+      console.log("handle gradeObj", gradeObj);
+      addNewGrade(gradeObj);
+  }
+
+   /**My alteration
+    * [
+    *   {
+    *   studentId: 7,
+    *   grades: [
+    *     {assignId: 17, grade: 98},
+    *     {assignId: 18, grade: 90},
+    *     {assignId: 19, grade: 89},
+    *     {assignId: 20, grade: 87}
+    *     ]
+    *   },
+    *   {studentId: 3,
+    *   grades: [
+    *     {assignId: 17, grade: 87},
+    *     {assignId: 18, grade: 85},
+    *     {assignId: 19, grade: 97},
+    *     {assignId: 20, grade: 75},
+    *     ]
+    *   }
+    * ]
+    */
+  /**claytons suggestion
+   * {
+      assignmentId: 17,
+      grades: [ 
+         {studentId: 34, grade: 98},
+         {studentId: 35, grade: 90},
+         {studentId: 36, grade: 72},
+         {studentId: 36, grade: 81},
+      ]
+    }  
+*/
+
+  const addNewGrade = (gradeObj2) => {
+      console.log("posting Object is ", gradeObj2);
+
+    fetch(`http://localhost:9000/add-grade/`,{
+      method: 'POST',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        "Authorization": "Bearer "+trimdJWT
+      },
+      body: JSON.stringify(gradeObj2)
+    })
+    .then(res=>res.text())
+    .then(response=>{
+      console.log("create new assignment response", response);
+      //once response received, navigate back to home page
+      // navigate(`/grades/${classId}`);
+    })
+  }
 
   /***create a function that handles the "save" POST fetch request for all the new grades */
 
@@ -59,7 +123,6 @@ const Grades = () => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("student fetch response", response);
       setStudentsArray(response);
     })
   }, [setStudentsArray])
@@ -74,13 +137,18 @@ const Grades = () => {
     })
     .then(res=>res.json())
     .then(response=>{
-      console.log("fetchAssignments response", response);
       setAssignmentList(response);
+      let assignments = response;
+      let assignObjs = [];
+      for(const assgn of assignments){
+        assignObjs.push({
+          assignmentId: assgn.id,
+          grade: null
+        })
+      }
+      setAssignmentsObjects(assignObjs);
     })
   }, []);
-  
-  console.log("studentsArray", studentsArray);
-  console.log("assignment List", assignmentList);
 
   return (
     <div style={{display: 'flex', flexWrap: 'wrap', flexDirection: 'row', width: '100vw'}}>
@@ -125,11 +193,12 @@ const Grades = () => {
             return(
             <StyledTableRow key={index}>
               <StyledTableCell sx={{width: '3vw'}} align="center">{student.user_name}</StyledTableCell>
-              <MapStudentGrades id={student.id} jwt={trimdJWT} numAssign={assignmentList.length} assignList={assignmentList}/>
+                <MapStudentGrades id={student.id} jwt={trimdJWT} numAssign={assignmentList.length} assignList={assignmentList} setGrades={handleGrade} assignObjs={assignmentsObjects}/>
             </StyledTableRow>
           )})}
         </TableBody>}
       </Table>
+      <Button id="save-grades-button" variant="outlined" sx={{fontWeight: 'bold'}}>Save Grades</Button>
       </TableContainer>
     </div>
   )

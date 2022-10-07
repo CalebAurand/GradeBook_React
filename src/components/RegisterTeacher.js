@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Container } from "@mui/material";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const RegisterTeacher = () => {
-  
+  const [showMessage, setShowMessage] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    setShowMessage(true);
+  }, [])
 
   const [userState, setUserState] = useState({
     full_name: "",
@@ -49,6 +55,9 @@ const RegisterTeacher = () => {
 
   return (
     <div className="App">
+      <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '1vh', width: '100vw' }}>
+        Teacher Registration
+      </div>
       <Container maxWidth="sm">
         <form className="login-form" onSubmit={register}>
           <TextField
@@ -95,6 +104,31 @@ const RegisterTeacher = () => {
           </Button>
         </form>
       </Container>
+      {showMessage && <Alert severity="warning" sx={{zIndex: 200, left: '28%', top: '38%', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '39vw', borderRadius: '10px'}}>
+        <AlertTitle sx={{fontWeight: 'bold'}}>
+          Are You A Student?
+        </AlertTitle>
+        You are on the teacher registration page - <strong>Do you need the student-registration page?</strong>
+        <div>
+          <Button variant="contained" sx={{display: 'inline-block', marginRight: 10}}
+            onClick={()=>{
+              navigate("/student-registration")
+              setShowMessage(false);
+              }
+            }
+          >
+            Yes
+          </Button>
+          <Button variant="contained" sx={{display: 'inline-block',}}
+            onClick={()=>{
+              setShowMessage(false);
+              }
+            }
+          >
+            No
+          </Button>
+        </div>
+      </Alert>}
     </div>
   );
 };

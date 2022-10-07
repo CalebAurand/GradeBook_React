@@ -12,6 +12,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,6 +38,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const GradeDetails = (props) => {
   const [classId, setClassId] = useState();
   const [gradeInfo, setGradeInfo] = useState();
+  const [showWarning, setShowWarning] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const {id} = useParams();
   const navigate = useNavigate();
   const cookies = cookie.parse(document.cookie);
@@ -58,6 +62,25 @@ const GradeDetails = (props) => {
       setClassId(response[0].class_id);
     })
   }, [id]);
+
+  const deleteGrade = (grade_id) => {
+    console.log("going to delete grade, id is: ", grade_id);
+
+    fetch(`http://localhost:9000/delete-grade/${grade_id}`,{
+      method: 'DELETE',
+      headers: {
+        // "Content-type": "application/json; charset=UTF-8",
+        "Authorization": "Bearer "+trimdJWT
+      }
+    })
+    .then(res=>console.log(res.status))
+    .then(response=>{
+      console.log("delete assignment response", response);
+      setDeleteId(null);
+      navigate(`/grades/${classId}`);
+    })
+  }
+
   return (
     <div>
       {cookies && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>Welcome, {cookies.email}</div>}
@@ -82,7 +105,7 @@ const GradeDetails = (props) => {
             <StyledTableCell align="center">Assignment Name</StyledTableCell>
             <StyledTableCell align="center">Type</StyledTableCell>
             <StyledTableCell align="center">Grade</StyledTableCell>
-            <StyledTableCell align="center">Description</StyledTableCell>
+            <StyledTableCell align="center">Comments</StyledTableCell>
             <StyledTableCell align="center"></StyledTableCell>
           </TableRow>
         </TableHead>
@@ -103,16 +126,48 @@ const GradeDetails = (props) => {
                 {gradeInfo.assignment_type === 'hw' && `${gradeInfo.grade}/5`}
                 {gradeInfo.assignment_type === 'project' && `${gradeInfo.grade}/50`}
               </StyledTableCell>
-              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">{gradeInfo.assignment_description}</StyledTableCell>
-              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center"><DeleteIcon sx={{color: "red", cursor: "pointer"}} /></StyledTableCell>
+              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">{gradeInfo.comments}</StyledTableCell>
+              <StyledTableCell sx={{minWidth: '5vw', width: '5vw', maxWidth: '30vw'}} align="center">
+                <DeleteIcon sx={{color: "red", cursor: "pointer"}} 
+                  onClick={()=>{
+                  setDeleteId(gradeInfo.gradeId);
+                  setShowWarning(true);
+                 }}/>
+              </StyledTableCell>
             </StyledTableRow>
         </TableBody>}
       </Table>
-        <Button variant="outlined" sx={{fontWeight: 'bold'}}>
-          <AddIcon fontSize="small" sx={{color: 'blue'}}/>
-          Update Grade
-        </Button>
+      <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/update-grade/${id}`}>
+          <Button variant="outlined" sx={{fontWeight: 'bold'}}>
+            <AddIcon fontSize="small" sx={{color: 'blue'}}/>
+            Update Grade
+          </Button>
+        </Link>
       </TableContainer>
+      {showWarning && <Alert severity="warning" sx={{zIndex: 200, left: '28%', top: '38%', position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '39vw', borderRadius: '10px'}}>
+        <AlertTitle sx={{fontWeight: 'bold'}}>Warning</AlertTitle>
+        The DELETE you are about to perform is permanent — <strong>Are you sure?</strong>
+          <div>
+            <Button variant="contained" sx={{display: 'inline-block', marginRight: 10}}
+              onClick={()=>{
+                deleteGrade(deleteId); 
+                setShowWarning(false);
+                }
+              }
+            >
+              Yes
+            </Button>
+            <Button variant="contained" sx={{display: 'inline-block',}}
+              onClick={()=>{
+                setDeleteId(null);
+                setShowWarning(false);
+                }
+              }
+            >
+              No
+            </Button>
+          </div>
+        </Alert>}
       </div>
   )
 }

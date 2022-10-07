@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 import cookie from 'cookie';
 import { styled } from '@mui/material/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -78,12 +78,12 @@ const Students = (props) => {
         ))}
         </TableBody>}
       </Table>
-      <Link to="/new-student">
+      {/* <Link to="/new-student">
       <Button variant="outlined" sx={{fontWeight: 'bold'}}>
         <AddIcon fontSize="small" sx={{color: 'blue'}}/>
         Create Student
       </Button>
-      </Link>
+      </Link> */}
       </TableContainer>
     </div>
     )

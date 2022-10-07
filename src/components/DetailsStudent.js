@@ -83,7 +83,7 @@ const DetailsStudent = (props) => {
       {cookies && <div style={{backgroundColor: '#D3CFFD', fontWeight: 'bold', fontSize: '16pt', textAlign: 'center', padding: '2vh', width: '100vw' }}>
         Welcome, {cookies.email}
       </div>}
-      <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
+      <TableContainer sx={{width: '100vw', height: '70vh'}} component={Paper}>
         <div style={{width: '60vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 2, marginBottom: 0 }}>
           <h2>Student's Grades</h2>
           <Link style={{textDecoration: 'none', marginLeft: '5px', marginRight: '5px'}} to={`/`}>
@@ -122,10 +122,6 @@ const DetailsStudent = (props) => {
             ))}
           </TableBody>}
         </Table>
-        <Button variant="outlined" sx={{fontWeight: 'bold'}}>
-          <AddIcon fontSize="small" sx={{color: 'blue'}}/>
-          Update Student Grades
-        </Button>
       </TableContainer>
       <TableContainer sx={{width: '100vw', height: '100vh'}} component={Paper}>
       <div style={{width: '60vw', display: 'flex', justifyContent: 'space-around', alignItems: 'center', marginLeft: 'auto', marginRight: 'auto', marginTop: 2, marginBottom: 0 }}>
