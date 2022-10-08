@@ -46,7 +46,7 @@ const Assignments = (props) => {
   console.log("currentClass", currentClass);
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer "+trimdJWT
@@ -58,7 +58,7 @@ const Assignments = (props) => {
   }, [setCurrentClass]);
 
   useEffect(() => {
-    fetch(`http://localhost:9000/assignments/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/assignments/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

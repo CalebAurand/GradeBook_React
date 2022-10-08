@@ -15,7 +15,6 @@ export default function NavBar(props) {
   const { unsetUser} = props;
   const cookies = cookie.parse(document.cookie);
   const location = useLocation().pathname;
-  console.log("location", location)
 
   useEffect(()=>{
     const navToggle = document.querySelector('.nav-toggle');

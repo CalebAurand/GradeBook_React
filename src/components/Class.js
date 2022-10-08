@@ -54,7 +54,7 @@ const Class = () => {
   const [showWarning, setShowWarning] = useState(false);
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer "+trimdJWT
@@ -66,7 +66,7 @@ const Class = () => {
   }, [setCurrentClass]);
 
   useEffect(() => {
-    fetch(`http://localhost:9000/view-class-students/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/view-class-students/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -86,7 +86,7 @@ const Class = () => {
       student_id: studentRemoveId
     }
     console.log(`removing student ID: ${studentRemoveId} from class ${currentClass.class_name}`)
-    fetch(`http://localhost:9000/remove-student/${currentClass.id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/remove-student/${currentClass.id}`,{
       method: 'DELETE',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

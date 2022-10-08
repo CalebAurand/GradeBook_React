@@ -18,7 +18,7 @@ const AddAssignment = (props) => {
   const trimdJWT = cookies.userJWT;
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer "+cookies.userJWT
@@ -56,7 +56,7 @@ const AddAssignment = (props) => {
     console.log("assignment Object is ", assignmentObj);
     //fetch POST request here
 
-    fetch(`http://localhost:9000/add-assignment/${classId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/add-assignment/${classId}`,{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

@@ -5,7 +5,7 @@ const ClassHeaderName = (props) => {
   const [currentClass, setCurrentClass] = useState({});
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer "+jwt

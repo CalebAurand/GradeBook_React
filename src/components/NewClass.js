@@ -32,7 +32,7 @@ const NewClass = (props) => {
     console.log("classObject is ", classObj);
     //fetch POST request here
 
-    fetch('http://localhost:9000/create-class',{
+    fetch('https://home-gradebook.herokuapp.com/create-class',{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

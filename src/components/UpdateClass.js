@@ -30,7 +30,7 @@ const UpdateClass = (props) => {
 
   useEffect(()=> {
     console.log("getting class")
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -54,7 +54,7 @@ const UpdateClass = (props) => {
     console.log("classObject is ", classObj);
     //fetch POST request here
 
-    fetch(`http://localhost:9000/update-class/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/update-class/${id}`,{
       method: 'PUT',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

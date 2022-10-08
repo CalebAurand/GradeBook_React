@@ -24,7 +24,7 @@ const UpdateAssignment = (props) => {
   });
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/assignment/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/assignment/${id}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -62,7 +62,7 @@ const UpdateAssignment = (props) => {
     console.log("assignment Object is ", assignmentObj);
     //fetch POST request here
 
-    fetch(`http://localhost:9000/update-assignment/${assignmentId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/update-assignment/${assignmentId}`,{
       method: 'PUT',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

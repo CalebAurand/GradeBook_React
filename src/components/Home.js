@@ -50,7 +50,7 @@ export default function Home(props) {
   const trimdJWT = cookies["userJWT"];
 
   useEffect( () => {
-    fetch('http://localhost:9000/view-count-classes',{
+    fetch('https://home-gradebook.herokuapp.com/view-count-classes',{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -77,7 +77,7 @@ export default function Home(props) {
 
   const deleteClass = (classId) => {
     console.log("going to delete class with ID: ", classId);
-    fetch(`http://localhost:9000/delete-class/${classId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/delete-class/${classId}`,{
       method: 'DELETE',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

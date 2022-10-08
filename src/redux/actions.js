@@ -35,7 +35,7 @@ const fetchLoginAction = (userArray) => { //userArray has two items, user object
 
 export const fetchLogin = (user) => {  
   return(dispatch) => { //prev http://localhost:9000/teacher-login https://home-gradebook.herokuapp.com/teacher-login
-    fetch('http://localhost:9000/teacher-login',{
+    fetch('https://home-gradebook.herokuapp.com/teacher-login',{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -55,7 +55,7 @@ export const fetchLogin = (user) => {
 
 export const fetchStudentLogin = (user) => {  
   return(dispatch) => { //prev http://localhost:9000/teacher-login https://home-gradebook.herokuapp.com/teacher-login
-    fetch('http://localhost:9000/student-login',{
+    fetch('https://home-gradebook.herokuapp.com/student-login',{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"

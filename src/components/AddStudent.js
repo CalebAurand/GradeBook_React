@@ -12,7 +12,7 @@ const AddStudent = (props) => {
   const [currentClass, setCurrentClass] = useState({});
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/view-class/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-class/${id}`, {
       method: "GET",
       headers: {
         "Authorization": "Bearer "+trimdJWT
@@ -47,7 +47,7 @@ const AddStudent = (props) => {
     //fetch POST request here
 
     
-    fetch(`http://localhost:9000/add-student/${classId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/add-student/${classId}`,{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

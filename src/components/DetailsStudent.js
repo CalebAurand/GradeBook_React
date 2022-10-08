@@ -44,7 +44,7 @@ const DetailsStudent = (props) => {
 
   useEffect(() => {
     //fetch request here
-    fetch(`http://localhost:9000/view-student/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/view-student/${id}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -62,7 +62,7 @@ const DetailsStudent = (props) => {
 
   useEffect(() => {
     //fetch request here
-    fetch(`http://localhost:9000/get-student-grades/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/get-student-grades/${id}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

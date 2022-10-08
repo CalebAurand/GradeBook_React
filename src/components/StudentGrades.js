@@ -38,7 +38,7 @@ const StudentGrades = (props) => {
   const trimdJWT = cookies.userJWT;
 
   useEffect(()=>{
-    fetch(`http://localhost:9000/student-grades/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/student-grades/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

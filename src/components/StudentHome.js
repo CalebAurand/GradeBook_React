@@ -38,7 +38,7 @@ export default function StudentHome(props) {
   const trimdJWT = user.userJWT.slice(1, user.userJWT.length-1);
 
   const runFetchClasses = async ()=>{
-    fetch('http://localhost:9000/student-classes',{
+    fetch('https://home-gradebook.herokuapp.com/student-classes',{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

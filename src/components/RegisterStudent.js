@@ -31,7 +31,7 @@ const RegisterStudent = () => {
     };
     console.log("new student to register info", newStudent);
     // fetch POST request to register new student (newStudent);
-    fetch('http://localhost:9000/student-registration',{
+    fetch('https://home-gradebook.herokuapp.com/student-registration',{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"

@@ -95,7 +95,7 @@ const Grades = () => {
   const addNewGrade = (gradeObj2) => {
       console.log("posting Object is ", gradeObj2);
 
-    fetch(`http://localhost:9000/add-grade/`,{
+    fetch(`https://home-gradebook.herokuapp.com/add-grade/`,{
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -114,7 +114,7 @@ const Grades = () => {
   /***create a function that handles the "save" POST fetch request for all the new grades */
 
   useEffect(()=>{
-    fetch(`http://localhost:9000/view-class-students/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/view-class-students/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -128,7 +128,7 @@ const Grades = () => {
   }, [setStudentsArray])
 
   useEffect(() => {
-    fetch(`http://localhost:9000/assignments/${id}`,{
+    fetch(`https://home-gradebook.herokuapp.com/assignments/${id}`,{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

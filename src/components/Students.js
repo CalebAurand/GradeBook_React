@@ -40,7 +40,7 @@ const Students = (props) => {
   const trimdJWT = cookies["userJWT"];
 
   useEffect (() => {
-    fetch('http://localhost:9000/view-students',{
+    fetch('https://home-gradebook.herokuapp.com/view-students',{
       method: 'GET',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",

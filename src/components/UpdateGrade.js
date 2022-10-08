@@ -52,7 +52,7 @@ const UpdateGrade = (props) => {
   });
 
   useEffect(()=> {
-    fetch(`http://localhost:9000/grade_details/${gradeId}`, {
+    fetch(`https://home-gradebook.herokuapp.com/grade_details/${gradeId}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -90,7 +90,7 @@ const UpdateGrade = (props) => {
     console.log("assignment Object is ", gradeObj);
     //fetch POST request here
 
-    fetch(`http://localhost:9000/update-grade/${gradeId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/update-grade/${gradeId}`,{
       method: 'PUT',
       headers: {
         "Content-type": "application/json; charset=UTF-8",

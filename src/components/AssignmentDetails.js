@@ -47,7 +47,7 @@ const AssignmentDetails = (props) => {
 
   useEffect(() => {
     //fetch request here
-    fetch(`http://localhost:9000/assignment/${id}`, {
+    fetch(`https://home-gradebook.herokuapp.com/assignment/${id}`, {
       method: "GET",
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
@@ -66,7 +66,7 @@ const AssignmentDetails = (props) => {
   const deleteAssignment = (assignmentId) => {
     console.log("going to delete assignment, id is: ", assignmentId);
 
-    fetch(`http://localhost:9000/delete-assignment/${assignmentId}`,{
+    fetch(`https://home-gradebook.herokuapp.com/delete-assignment/${assignmentId}`,{
       method: 'DELETE',
       headers: {
         // "Content-type": "application/json; charset=UTF-8",
